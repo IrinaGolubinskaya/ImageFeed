@@ -21,53 +21,49 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" name="YP Black"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImageListCell" rowHeight="153" id="xar-gR-O70" customClass="ImageListCell" customModule="ImageFeed" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="153"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageListCell" id="UpW-8a-SHR" customClass="ImageListCell" customModule="ImageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="132"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xar-gR-O70" id="SoI-2L-29P" customClass="ImageListCell" customModule="ImageFeed" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="153"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UpW-8a-SHR" id="rfb-Yx-su8">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="132"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="o" translatesAutoresizingMaskIntoConstraints="NO" id="YP1-I8-hTh">
-                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="153"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="vlm-l4-zHg">
+                                                    <rect key="frame" x="16" y="0.0" width="361" height="132"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                             <integer key="value" value="16"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DATE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0U-Pf-y35">
-                                                    <rect key="frame" x="27.999999999999996" y="118.33333333333333" width="32.666666666666657" height="15.666666666666671"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHW-zc-rXz">
+                                                    <rect key="frame" x="349" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="V7Z-qh-JRK"/>
+                                                        <constraint firstAttribute="height" constant="44" id="ZAs-Vc-0lb"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="favourite" title=" "/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpC-Hs-CA2">
+                                                    <rect key="frame" x="28" y="108" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" name="YP White"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1mX-2q-hku">
-                                                    <rect key="frame" x="329" y="11" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="AIa-X2-JDE"/>
-                                                        <constraint firstAttribute="width" constant="44" id="Q56-a8-gRm"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="favourite"/>
-                                                </button>
                                             </subviews>
+                                            <color key="backgroundColor" name="YP Black"/>
                                             <constraints>
-                                                <constraint firstItem="1mX-2q-hku" firstAttribute="trailing" secondItem="SoI-2L-29P" secondAttribute="trailingMargin" id="Gff-bd-fyS"/>
-                                                <constraint firstAttribute="bottom" secondItem="YP1-I8-hTh" secondAttribute="bottom" id="ITH-mD-FdT"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="r0U-Pf-y35" secondAttribute="bottom" constant="8" id="Lf6-IL-4FE"/>
-                                                <constraint firstItem="YP1-I8-hTh" firstAttribute="leading" secondItem="SoI-2L-29P" secondAttribute="leading" id="ZtM-9p-DDW"/>
-                                                <constraint firstAttribute="trailing" secondItem="YP1-I8-hTh" secondAttribute="trailing" id="c8A-j2-gng"/>
-                                                <constraint firstItem="r0U-Pf-y35" firstAttribute="leading" secondItem="SoI-2L-29P" secondAttribute="leadingMargin" constant="8" id="qH4-A2-pOY"/>
-                                                <constraint firstItem="1mX-2q-hku" firstAttribute="top" secondItem="SoI-2L-29P" secondAttribute="topMargin" id="rgi-sB-LQh"/>
-                                                <constraint firstItem="YP1-I8-hTh" firstAttribute="top" secondItem="SoI-2L-29P" secondAttribute="top" id="uvU-Tf-0E0"/>
+                                                <constraint firstItem="vlm-l4-zHg" firstAttribute="leading" secondItem="rfb-Yx-su8" secondAttribute="leading" constant="16" id="0Nj-f4-NKV"/>
+                                                <constraint firstAttribute="bottom" secondItem="vlm-l4-zHg" secondAttribute="bottom" id="Dkn-z3-Cmg"/>
+                                                <constraint firstItem="fpC-Hs-CA2" firstAttribute="leading" secondItem="rfb-Yx-su8" secondAttribute="leadingMargin" constant="8" id="Jc0-gi-3ih"/>
+                                                <constraint firstItem="vlm-l4-zHg" firstAttribute="top" secondItem="rfb-Yx-su8" secondAttribute="top" id="NBl-F8-pdb"/>
+                                                <constraint firstAttribute="trailing" secondItem="XHW-zc-rXz" secondAttribute="trailing" id="U4l-of-zM7"/>
+                                                <constraint firstAttribute="trailing" secondItem="vlm-l4-zHg" secondAttribute="trailing" constant="16" id="jjR-Xq-y5H"/>
+                                                <constraint firstItem="fpC-Hs-CA2" firstAttribute="bottom" secondItem="rfb-Yx-su8" secondAttribute="bottomMargin" constant="8" id="tZT-or-5QM"/>
+                                                <constraint firstItem="XHW-zc-rXz" firstAttribute="top" secondItem="rfb-Yx-su8" secondAttribute="top" id="v7n-GJ-Koc"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="dateLabel" destination="r0U-Pf-y35" id="2k6-sN-23n"/>
-                                            <outlet property="favouriteButton" destination="1mX-2q-hku" id="Uc7-wk-Nnh"/>
-                                            <outlet property="mainImageView" destination="YP1-I8-hTh" id="Yoo-go-kOL"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -95,8 +91,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="0" width="200" height="132"/>
         <image name="favourite" width="44" height="44"/>
-        <image name="o" width="200" height="132"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

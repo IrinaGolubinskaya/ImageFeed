@@ -16,7 +16,7 @@ class ImagesListViewController: UIViewController {
     }
     
     func configCell(for cell: ImageListCell) {
-        cell.getDate()
+      //  cell.getDate()
     }
 }
 extension ImagesListViewController: UITableViewDataSource {
