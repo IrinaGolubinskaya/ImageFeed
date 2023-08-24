@@ -15,6 +15,7 @@
 		3C1C2C372A781364008EEB95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C1C2C352A781364008EEB95 /* LaunchScreen.storyboard */; };
 		3C1C2C442A814509008EEB95 /* UIColorAndExtension .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1C2C432A814509008EEB95 /* UIColorAndExtension .swift */; };
 		3C1C2C672A8BAFDD008EEB95 /* ImageListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1C2C662A8BAFDD008EEB95 /* ImageListCell.swift */; };
+		3C1C2C692A9794DA008EEB95 /* ImageListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C1C2C682A9794DA008EEB95 /* ImageListCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		3C1C2C382A781364008EEB95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C1C2C432A814509008EEB95 /* UIColorAndExtension .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColorAndExtension .swift"; sourceTree = "<group>"; };
 		3C1C2C662A8BAFDD008EEB95 /* ImageListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListCell.swift; sourceTree = "<group>"; };
+		3C1C2C682A9794DA008EEB95 /* ImageListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageListCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			children = (
 				3C1C2C2E2A781362008EEB95 /* ImagesListViewController.swift */,
 				3C1C2C662A8BAFDD008EEB95 /* ImageListCell.swift */,
+				3C1C2C682A9794DA008EEB95 /* ImageListCell.xib */,
 			);
 			path = ImageList;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C1C2C372A781364008EEB95 /* LaunchScreen.storyboard in Resources */,
+				3C1C2C692A9794DA008EEB95 /* ImageListCell.xib in Resources */,
 				3C1C2C342A781364008EEB95 /* Assets.xcassets in Resources */,
 				3C1C2C322A781362008EEB95 /* Main.storyboard in Resources */,
 			);

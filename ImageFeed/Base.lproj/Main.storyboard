@@ -20,71 +20,6 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NUu-xw-Sb4">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" name="YP Black"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageListCell" id="UpW-8a-SHR" customClass="ImageListCell" customModule="ImageFeed" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="140"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UpW-8a-SHR" id="rfb-Yx-su8">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="vlm-l4-zHg">
-                                                    <rect key="frame" x="16" y="4" width="361" height="132"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                            <integer key="value" value="16"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHW-zc-rXz">
-                                                    <rect key="frame" x="333" y="0.0" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="44" id="V7Z-qh-JRK"/>
-                                                        <constraint firstAttribute="height" constant="44" id="ZAs-Vc-0lb"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="favourite" title=" "/>
-                                                    <connections>
-                                                        <action selector="favouriteButtonActive:" destination="UpW-8a-SHR" eventType="touchUpInside" id="c8S-PA-Nn7"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpC-Hs-CA2">
-                                                    <rect key="frame" x="32" y="115" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" name="YP White"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6PY-VY-GOw">
-                                                    <rect key="frame" x="16" y="106" width="361" height="30"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="IUV-tX-DmZ"/>
-                                                    </constraints>
-                                                </view>
-                                            </subviews>
-                                            <color key="backgroundColor" name="YP Black"/>
-                                            <constraints>
-                                                <constraint firstItem="vlm-l4-zHg" firstAttribute="leading" secondItem="rfb-Yx-su8" secondAttribute="leading" constant="16" id="0Nj-f4-NKV"/>
-                                                <constraint firstAttribute="bottom" secondItem="vlm-l4-zHg" secondAttribute="bottom" constant="4" id="Dkn-z3-Cmg"/>
-                                                <constraint firstItem="fpC-Hs-CA2" firstAttribute="leading" secondItem="vlm-l4-zHg" secondAttribute="leadingMargin" constant="8" id="Jc0-gi-3ih"/>
-                                                <constraint firstItem="vlm-l4-zHg" firstAttribute="top" secondItem="rfb-Yx-su8" secondAttribute="top" constant="4" id="NBl-F8-pdb"/>
-                                                <constraint firstItem="vlm-l4-zHg" firstAttribute="trailing" secondItem="XHW-zc-rXz" secondAttribute="trailing" id="U4l-of-zM7"/>
-                                                <constraint firstItem="6PY-VY-GOw" firstAttribute="leading" secondItem="vlm-l4-zHg" secondAttribute="leading" id="dfS-5K-RdL"/>
-                                                <constraint firstItem="6PY-VY-GOw" firstAttribute="bottom" secondItem="vlm-l4-zHg" secondAttribute="bottom" id="i1Q-8z-nXC"/>
-                                                <constraint firstAttribute="trailing" secondItem="vlm-l4-zHg" secondAttribute="trailing" constant="16" id="jjR-Xq-y5H"/>
-                                                <constraint firstItem="fpC-Hs-CA2" firstAttribute="bottom" secondItem="vlm-l4-zHg" secondAttribute="bottomMargin" constant="8" id="tZT-or-5QM"/>
-                                                <constraint firstItem="XHW-zc-rXz" firstAttribute="top" secondItem="vlm-l4-zHg" secondAttribute="top" constant="-4" id="v7n-GJ-Koc"/>
-                                                <constraint firstItem="6PY-VY-GOw" firstAttribute="trailing" secondItem="vlm-l4-zHg" secondAttribute="trailing" id="ybU-7E-g7l"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="dateLabel" destination="fpC-Hs-CA2" id="sBh-oO-t9R"/>
-                                            <outlet property="favouriteButton" destination="XHW-zc-rXz" id="Lr4-fP-3Nj"/>
-                                            <outlet property="gradientView" destination="6PY-VY-GOw" id="NvP-EM-lpy"/>
-                                            <outlet property="mainImageView" destination="vlm-l4-zHg" id="hUi-w6-9nc"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="zns-on-coC"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="LKG-sa-Cgd"/>
@@ -110,13 +45,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0" width="200" height="132"/>
-        <image name="favourite" width="44" height="44"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="YP White">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -9,10 +9,10 @@ import UIKit
 
 final class ImageListCell: UITableViewCell {
     
-    @IBOutlet weak var mainImageView: UIImageView!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var favouriteButton: UIButton!
-    @IBOutlet weak var gradientView: UIView!
+    @IBOutlet private weak var mainImageView: UIImageView!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var favouriteButton: UIButton!
+    @IBOutlet private weak var gradientView: UIView!
     
     static let reuseIdentifier = "ImageListCell"
     
