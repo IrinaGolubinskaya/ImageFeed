@@ -11,12 +11,6 @@ final class ImagesListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(UINib(nibName: ImageListCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: ImageListCell.reuseIdentifier)
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-    }
-    
     private let photosName: [String] = Array(0..<20).map{"\($0)" }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -25,6 +19,12 @@ final class ImagesListViewController: UIViewController {
         formatter.timeStyle = .none
         return formatter
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.register(UINib(nibName: ImageListCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: ImageListCell.reuseIdentifier)
+        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+    }
 }
 
 extension ImagesListViewController: UITableViewDataSource {
@@ -60,8 +60,5 @@ extension ImagesListViewController: UITableViewDelegate {
         let scale = imageViewWidth / imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
 }
