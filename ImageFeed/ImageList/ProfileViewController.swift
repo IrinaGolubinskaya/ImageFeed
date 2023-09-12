@@ -14,6 +14,10 @@ final class ProfileViewController: UIViewController {
     let statusLabel = UILabel()
     let logoutButton = UIButton()
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getProfilePhoto()

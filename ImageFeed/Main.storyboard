@@ -153,18 +153,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVh-0I-oXf">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="414" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="3vL-dn-mPu">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="414"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                         <color key="backgroundColor" name="YP Black"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="3vL-dn-mPu" firstAttribute="trailing" secondItem="fF1-nC-c9V" secondAttribute="trailing" id="8Ni-i3-gM6"/>
+                                    <constraint firstItem="3vL-dn-mPu" firstAttribute="top" secondItem="fF1-nC-c9V" secondAttribute="top" id="HxK-WA-Eh2"/>
                                     <constraint firstItem="3vL-dn-mPu" firstAttribute="leading" secondItem="XVh-0I-oXf" secondAttribute="leading" id="Qeh-jb-E7e"/>
                                     <constraint firstItem="3vL-dn-mPu" firstAttribute="top" secondItem="XVh-0I-oXf" secondAttribute="top" id="WyO-ff-e8P"/>
                                     <constraint firstAttribute="trailing" secondItem="3vL-dn-mPu" secondAttribute="trailing" id="cUi-vW-E03"/>
+                                    <constraint firstItem="3vL-dn-mPu" firstAttribute="leading" secondItem="fF1-nC-c9V" secondAttribute="leading" id="eDe-T8-z4h"/>
                                     <constraint firstAttribute="bottom" secondItem="3vL-dn-mPu" secondAttribute="bottom" id="lMM-04-iZx"/>
+                                    <constraint firstItem="fF1-nC-c9V" firstAttribute="bottom" secondItem="3vL-dn-mPu" secondAttribute="bottom" id="paf-vI-uM8"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="fJz-WO-iul"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="fF1-nC-c9V"/>
@@ -173,7 +177,7 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="een-WQ-0ZS" userLabel="backwardButton">
-                                <rect key="frame" x="8" y="57" width="24" height="24"/>
+                                <rect key="frame" x="8" y="-2" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="pSu-Jx-kWG"/>
                                     <constraint firstAttribute="height" constant="24" id="t7o-jr-J2f"/>
@@ -185,7 +189,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ag9-7h-RyB" userLabel="ShareButton">
-                                <rect key="frame" x="171.66666666666666" y="707" width="50" height="50"/>
+                                <rect key="frame" x="171.66666666666666" y="741" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="aIG-Vk-JBB"/>
                                     <constraint firstAttribute="width" constant="50" id="dOD-uW-bs0"/>
@@ -200,14 +204,14 @@
                         <viewLayoutGuide key="safeArea" id="mzu-Z8-hCg"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="XVh-0I-oXf" firstAttribute="top" secondItem="mzu-Z8-hCg" secondAttribute="top" id="1Yg-aI-mey"/>
+                            <constraint firstItem="XVh-0I-oXf" firstAttribute="top" secondItem="223-a4-RMz" secondAttribute="top" id="1Yg-aI-mey"/>
                             <constraint firstItem="Ag9-7h-RyB" firstAttribute="centerX" secondItem="mzu-Z8-hCg" secondAttribute="centerX" id="RUE-fB-SZd"/>
                             <constraint firstItem="mzu-Z8-hCg" firstAttribute="bottom" secondItem="Ag9-7h-RyB" secondAttribute="bottom" constant="61" id="Wln-Fy-8OK"/>
                             <constraint firstItem="mzu-Z8-hCg" firstAttribute="top" secondItem="een-WQ-0ZS" secondAttribute="top" constant="2" id="eRC-zO-SWY"/>
-                            <constraint firstItem="mzu-Z8-hCg" firstAttribute="bottom" secondItem="XVh-0I-oXf" secondAttribute="bottom" id="g9S-tp-8hD"/>
-                            <constraint firstItem="mzu-Z8-hCg" firstAttribute="trailing" secondItem="XVh-0I-oXf" secondAttribute="trailing" id="hXB-bR-YnV"/>
+                            <constraint firstAttribute="bottom" secondItem="XVh-0I-oXf" secondAttribute="bottom" id="g9S-tp-8hD"/>
+                            <constraint firstAttribute="trailing" secondItem="XVh-0I-oXf" secondAttribute="trailing" id="hXB-bR-YnV"/>
                             <constraint firstItem="een-WQ-0ZS" firstAttribute="leading" secondItem="mzu-Z8-hCg" secondAttribute="leading" constant="8" id="rCP-RS-oJW"/>
-                            <constraint firstItem="XVh-0I-oXf" firstAttribute="leading" secondItem="mzu-Z8-hCg" secondAttribute="leading" id="zlV-QO-fAW"/>
+                            <constraint firstItem="XVh-0I-oXf" firstAttribute="leading" secondItem="223-a4-RMz" secondAttribute="leading" id="zlV-QO-fAW"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="5vH-oP-P2u"/>

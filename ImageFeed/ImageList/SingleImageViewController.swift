@@ -27,7 +27,11 @@ final class SingleImageViewController: UIViewController {
         rescaleAndCenterImageInScrollView(image: image)
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        }
+        
+        NSLayoutConstraint.activate([
+            
+        ])
+    }
     
     @IBAction func shareButtonAction(_ sender: Any) {
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
