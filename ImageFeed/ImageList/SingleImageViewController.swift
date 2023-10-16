@@ -8,23 +8,21 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
-    }
-    
+
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
             fullImageView.image = image
             rescaleAndCenterImageInScrollView(image: image ?? UIImage())
-
         }
     }
     
     @IBOutlet var fullImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +58,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
 }
+
+// MARK: - UIScrollViewDelegate
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
