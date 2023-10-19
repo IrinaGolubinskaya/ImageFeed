@@ -37,7 +37,7 @@ extension SplashViewController {
                 let navigationController = segue.destination as? UINavigationController,
                 let viewController = navigationController.viewControllers[0] as? AuthViewController
             else {
-                fatalError("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)")
+                return
             }
             
             viewController.delegate = self
@@ -47,7 +47,7 @@ extension SplashViewController {
     }
     
     func switchToTabBarController() {
-        guard let window = UIApplication.shared.windows.first else {fatalError("Invalid Configuration")}
+        guard let window = UIApplication.shared.windows.first else { return }
         
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
