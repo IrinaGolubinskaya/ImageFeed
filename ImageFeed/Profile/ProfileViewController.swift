@@ -8,10 +8,12 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    private let profileService = ProfileService()
+    
     let nameLabel = UILabel()
     let profileImage = UIImageView()
     let nickNameLabel = UILabel()
-    let statusLabel = UILabel()
+    let descriptionLabel = UILabel()
     let logoutButton = UIButton()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -25,8 +27,25 @@ final class ProfileViewController: UIViewController {
         addNickName()
         addStatusLabel()
         addLogoutButton()
+        updateProfile()
     }
     
+    private func updateProfile() {
+        guard let token = OAuth2TokenStorage().token else { return }
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profile):
+                DispatchQueue.main.async {
+                    self.nameLabel.text = profile.name
+                    self.nickNameLabel.text = profile.loginName
+                    self.descriptionLabel.text = profile.bio
+                }
+            case .failure(let error):
+                break
+            }
+        }
+    }
     private func addProfilePhoto() {
         let image = UIImage(named: "userPhoto")
         profileImage.image = image
@@ -75,17 +94,17 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addStatusLabel() {
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusLabel)
-        statusLabel.text = "Hello, world!"
-        statusLabel.textColor = .ypWhite
-        statusLabel.font.withSize(13)
-        statusLabel.numberOfLines = 0
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(descriptionLabel)
+        descriptionLabel.text = "Hello, world!"
+        descriptionLabel.textColor = .ypWhite
+        descriptionLabel.font.withSize(13)
+        descriptionLabel.numberOfLines = 0
         
         NSLayoutConstraint.activate([
-            statusLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            statusLabel.topAnchor.constraint(equalTo: nickNameLabel.bottomAnchor, constant: 8),
-            statusLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            descriptionLabel.topAnchor.constraint(equalTo: nickNameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
     

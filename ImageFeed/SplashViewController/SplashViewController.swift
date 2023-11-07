@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2TokenStorage = OAuth2TokenStorage()
-    private let oauth2Service = OAuth2Service()
+    private let oauth2Service = OAuth2Service.shared
+    private let profileService = ProfileService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,22 +62,42 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            self.fetchOAuthToken(code)
+            self.fetchToken(code)
         }
     }
     
-    private func fetchOAuthToken(_ code: String) {
+    private func fetchToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
                 self.switchToTabBarController()
+                UIBlockingProgressHUD.dismiss()
             case .failure:
-                // TODO [Sprint 11]
+                UIBlockingProgressHUD.dismiss()
+                // TODO: [Sprint 11] Показать ошибку
                 break
             }
         }
     }
+    private func fetchProfile(token:String) {
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profileResult):
+                
+                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                // TODO: [Sprint 11] Показать ошибку
+            case .success(_):
+                <#code#>
+            }
+        }
+    }
+    
 }
