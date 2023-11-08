@@ -13,7 +13,7 @@ final class SplashViewController: UIViewController {
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
-    private let profileService = ProfileService()
+    private let profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +73,9 @@ extension SplashViewController: AuthViewControllerDelegate {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let token):
+                // TODO: не пнимаю что писать вместо  STRING(я написала в строе выше в скобках (лет токен:)
+                self.fetchProfile(token: token)
                 self.switchToTabBarController()
                 UIBlockingProgressHUD.dismiss()
             case .failure:
@@ -83,21 +85,19 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
+    
     private func fetchProfile(token:String) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let profileResult):
+            case .success(_):
                 
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 // TODO: [Sprint 11] Показать ошибку
-            case .success(_):
-                <#code#>
             }
         }
     }
-    
 }

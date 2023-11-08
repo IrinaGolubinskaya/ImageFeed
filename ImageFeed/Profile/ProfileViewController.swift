@@ -8,8 +8,8 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    private let profileService = ProfileService()
-    
+    private let profileService = ProfileService.shared
+
     let nameLabel = UILabel()
     let profileImage = UIImageView()
     let nickNameLabel = UILabel()
@@ -27,25 +27,14 @@ final class ProfileViewController: UIViewController {
         addNickName()
         addStatusLabel()
         addLogoutButton()
-        updateProfile()
+        updateProfileDetails(profile: profileService.profile)
     }
-    
-    private func updateProfile() {
-        guard let token = OAuth2TokenStorage().token else { return }
-        profileService.fetchProfile(token) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let profile):
-                DispatchQueue.main.async {
-                    self.nameLabel.text = profile.name
-                    self.nickNameLabel.text = profile.loginName
-                    self.descriptionLabel.text = profile.bio
-                }
-            case .failure(let error):
-                break
-            }
-        }
+    private func updateProfileDetails(profile: Profile?) {
+        nameLabel.text = profile?.name
+        nickNameLabel.text = profile?.loginName
+        descriptionLabel.text = profile?.bio
     }
+
     private func addProfilePhoto() {
         let image = UIImage(named: "userPhoto")
         profileImage.image = image

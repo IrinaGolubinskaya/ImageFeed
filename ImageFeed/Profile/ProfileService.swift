@@ -8,13 +8,17 @@
 import UIKit
 
 final class ProfileService {
+    static let shared = ProfileService()
+    
     private var authToken: String? {
         return OAuth2TokenStorage().token
     }
     
     private var task: URLSessionTask?
     
-  private func makeRequest()-> URLRequest? {
+    private(set) var profile: Profile?
+    
+    private func makeRequest()-> URLRequest? {
         guard let url = URL(string: Constants.unsplashBaseURLString) else { return nil }
         var request = URLRequest(url: url)
         
@@ -33,10 +37,14 @@ final class ProfileService {
             guard let self = self else { return }
             switch result {
             case .success(let profileResult):
-                let name = "\(profileResult.firstName) \(profileResult.lastName)"
-                let loginName = "@\(profileResult.userName)"
-                
-                let profile = Profile(username: profileResult.userName, name: name, loginName: loginName, bio: profileResult.bio)
+                let profile = Profile(
+                    username: profileResult.userName,
+                    firstName: profileResult.firstName,
+                    lastName: profileResult.lastName,
+                    bio: profileResult.bio
+                )
+                self.profile = profile
+                completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -64,7 +72,7 @@ final class ProfileService {
 
 struct ProfileResult: Codable {
     
-   // let id: String
+    // let id: String
     // let updatedAt : String
     
     let userName: String
@@ -126,14 +134,14 @@ struct ProfileResult: Codable {
         // case email
     }
 }
-   struct Links {
-       let selfLink: String
-       let html: String
-       let photos: String
-       let likes: String
-       let portfolio: String
-       
-       private enum CodingKeys: String, CodingKey {
-           case selfLink = "self"
-       }
-   }
+struct Links {
+    let selfLink: String
+    let html: String
+    let photos: String
+    let likes: String
+    let portfolio: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case selfLink = "self"
+    }
+}
