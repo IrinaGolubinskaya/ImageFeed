@@ -6,15 +6,64 @@
 //
 
 import Foundation
+
 final class ProfileImageService {
+    
     static let shared = ProfileImageService()
+    
+    private var authToken: String? {
+        return OAuth2TokenStorage().token
+    }
+    
     private (set) var avatarURL: String?
     
+    private var task: URLSessionTask?
+
+    private func makeRequest()-> URLRequest? {
+        guard let url = URL(string: "\(Constants.unsplashBaseURLString)/users/:username") else { return nil }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        // TODO:
+        assert(Thread.isMainThread)
+        task?.cancel()
+        
+        guard let request = makeRequest() else { return }
+        let task = object(for: request) {
+            [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let userResult):
+                let avatarURL = userResult.profileImage.small
+                self.avatarURL = avatarURL
+                completion(.success(avatarURL))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        self.task = task
+        task.resume()
+    }
+    
+    private func object(
+        for request: URLRequest,
+        completion: @escaping( Result<UserResult, Error>) -> Void
+    ) -> URLSessionTask {
+        let decoder = JSONDecoder()
+        return URLSession.shared.data(for: request) { (result: Result<Data,Error>) in
+            let response = result.flatMap { data -> Result< UserResult,Error> in
+                Result {
+                    try decoder.decode(UserResult.self, from: data)
+                }
+            }
+            completion(response)
+        }
     }
 }
-
 
 struct UserResult: Codable {
     let profileImage: ProfileImage

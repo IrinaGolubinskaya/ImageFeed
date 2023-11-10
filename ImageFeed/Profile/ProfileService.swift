@@ -19,7 +19,7 @@ final class ProfileService {
     private(set) var profile: Profile?
     
     private func makeRequest()-> URLRequest? {
-        guard let url = URL(string: Constants.unsplashBaseURLString) else { return nil }
+        guard let url = URL(string: "\(Constants.unsplashBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)
         
         request.httpMethod = "GET"

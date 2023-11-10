@@ -14,6 +14,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +77,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success(let token):
                 // TODO: не пнимаю что писать вместо  STRING(я написала в строе выше в скобках (лет токен:)
                 self.fetchProfile(token: token)
+                
                 self.switchToTabBarController()
                 UIBlockingProgressHUD.dismiss()
             case .failure:
@@ -90,8 +92,8 @@ extension SplashViewController: AuthViewControllerDelegate {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(_):
-                
+            case .success(let profileResult):
+                self.profileImageService.fetchProfileImageURL(username: profileResult.username) { _ in }
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
             case .failure:
