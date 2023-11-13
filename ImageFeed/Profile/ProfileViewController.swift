@@ -16,18 +16,39 @@ final class ProfileViewController: UIViewController {
     let descriptionLabel = UILabel()
     let logoutButton = UIButton()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main,
+            using: { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            })
+        updateAvatar()
         addProfilePhoto()
         addProfileName()
         addNickName()
         addStatusLabel()
         addLogoutButton()
         updateProfileDetails(profile: profileService.profile)
+        
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        // TODO: [Sprint 11] Обновить аватар, используя Kingfisher
     }
     private func updateProfileDetails(profile: Profile?) {
         nameLabel.text = profile?.name

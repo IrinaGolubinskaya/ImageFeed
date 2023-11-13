@@ -18,7 +18,9 @@ final class ProfileImageService {
     private (set) var avatarURL: String?
     
     private var task: URLSessionTask?
-
+    
+    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+                                                         
     private func makeRequest()-> URLRequest? {
         guard let url = URL(string: "\(Constants.unsplashBaseURLString)/users/:username") else { return nil }
         var request = URLRequest(url: url)
@@ -41,6 +43,12 @@ final class ProfileImageService {
                 let avatarURL = userResult.profileImage.small
                 self.avatarURL = avatarURL
                 completion(.success(avatarURL))
+                //добавила нотификейшн старым способом:
+//                NotificationCenter.default
+//                    .post(name: ProfileImageService.DidChangeNotification,
+//                          object: self,
+//                    userInfo: ["URL" : avatarURL])
+//
             case .failure(let error):
                 completion(.failure(error))
             }
