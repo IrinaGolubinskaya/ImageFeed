@@ -27,7 +27,7 @@ final class ProfileViewController: UIViewController {
         addLogoutButton()
     }
     
-    func addProfilePhoto() {
+    private func addProfilePhoto() {
         let image = UIImage(named: "userPhoto")
         profileImage.image = image
         profileImage.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +44,7 @@ final class ProfileViewController: UIViewController {
         )
     }
     
-    func addProfileName() {
+    private func addProfileName() {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
         nameLabel.text = "Екатерина Новикова"
@@ -55,11 +55,11 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor , constant: 8),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -118)
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
     
-    func addNickName() {
+    private func addNickName() {
         nickNameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nickNameLabel)
         nickNameLabel.text = "@ekaterina_nov"
@@ -70,11 +70,11 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             nickNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nickNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            nickNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -260)
+            nickNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
     
-    func addStatusLabel() {
+    private func addStatusLabel() {
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(statusLabel)
         statusLabel.text = "Hello, world!"
@@ -85,11 +85,11 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             statusLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             statusLabel.topAnchor.constraint(equalTo: nickNameLabel.bottomAnchor, constant: 8),
-            statusLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -282)
+            statusLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
     
-    func addLogoutButton() {
+    private func addLogoutButton() {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "logout"), for: .normal)
