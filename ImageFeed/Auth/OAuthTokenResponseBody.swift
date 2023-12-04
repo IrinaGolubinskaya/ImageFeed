@@ -26,7 +26,6 @@ struct OAuthTokenResponseBody: Decodable {
             let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
             return response
         } catch {
-            print("error")
             return nil
         }
     }

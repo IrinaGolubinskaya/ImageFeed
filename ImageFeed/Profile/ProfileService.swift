@@ -3,7 +3,6 @@
 //  ImageFeed
 //
 //  Created by Irina Golubinskaya on 07.11.2023.
-//
 
 import UIKit
 
@@ -19,11 +18,13 @@ final class ProfileService {
     private(set) var profile: Profile?
     
     private func makeRequest()-> URLRequest? {
-        guard let url = URL(string: "\(Constants.unsplashBaseURLString)/me") else { return nil }
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)
-        
         request.httpMethod = "GET"
-        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        if let token = authToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         return request
     }
     
@@ -32,16 +33,16 @@ final class ProfileService {
         task?.cancel()
         
         guard let request = makeRequest() else { return }
-        let task = object(for: request) {
-            [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self]
+            (result:Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let profileResult):
                 let profile = Profile(
-                    username: profileResult.userName,
-                    firstName: profileResult.firstName,
-                    lastName: profileResult.lastName,
-                    bio: profileResult.bio
+                    username: profileResult.username,
+                    firstName: profileResult.firstName ?? "",
+                    lastName: profileResult.lastName ?? "",
+                    bio: profileResult.bio ?? ""
                 )
                 self.profile = profile
                 completion(.success(profile))
@@ -49,7 +50,6 @@ final class ProfileService {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task.resume()
     }
@@ -70,71 +70,24 @@ final class ProfileService {
     }
 }
 
-struct ProfileResult: Codable {
-    
-    // let id: String
-    // let updatedAt : String
-    
-    let userName: String
-    let firstName: String
-    let lastName: String
-    // let profile_image: String
-    // let twitterUsername: String
-    // let portfolioUrl: URL?
-    let bio: String
-    // let location: String
-    // let totalLikes: Int
-    // let totalPhotos: Int
-    // let totalCollections: Int
-    // let followedByUser: Bool
-    // let downloads: Int
-    // let uploadsRemaining: Int
-    // let instagramUsername: String
-    //  let location: String?
-    //  let email: String
-    //  let links: Links
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.userName = try container.decode(String.self, forKey: .userName)
-        self.firstName = try container.decode(String.self, forKey: .firstName)
-        self.lastName = try container.decode(String.self, forKey: .lastName)
-        self.bio = try container.decode(String.self, forKey: .bio)
-    }
-    
+struct ProfileResult: Decodable {
+    let username: String
+    let firstName: String?
+    let lastName: String?
+    let bio: String?
+
     private func getProfileResult(from jsonString: String) -> ProfileResult? {
         guard let data = jsonString.data(using: .utf8) else { return nil }
         do {
             let profileResponse = try JSONDecoder().decode(ProfileResult.self, from: data)
             return profileResponse
         } catch {
-            print("error")
             return nil
         }
     }
-    
-    private enum CodingKeys: String, CodingKey {
-        // case id
-        // case updatedAt = "updatedAt"
-        case userName = "username"
-        case firstName = "first_name"
-        case lastName = "last_name"
-        // case twitterUsername = "twitter_username"
-        // case portfolioUrl = "portfolio_url"
-        case bio
-        //   case location
-        // case totalLikes = "total_likes"
-        //  case totalPhotos = "total_photos"
-        //  case totalCollections = "total_collections"
-        //  case followedByUser = "followed_by_user"
-        //  case downloads
-        //  case uploadsRemaining = "uploads_remaining"
-        // case instagramUsername = "instagram_username"
-        // case location
-        // case email
-    }
 }
-struct Links {
+
+struct Links: Decodable {
     let selfLink: String
     let html: String
     let photos: String
@@ -143,5 +96,35 @@ struct Links {
     
     private enum CodingKeys: String, CodingKey {
         case selfLink = "self"
+        case html
+        case photos
+        case likes
+        case portfolio
+    }
+}
+
+struct Social: Decodable {
+    let instagramUsername: String
+    let portfolioURL: String
+    let twitterUsername: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case instagramUsername = "instagram_username"
+        case portfolioURL = "portfolio_url"
+        case twitterUsername = "twitter_username"
+    }
+}
+
+struct Badge: Decodable {
+    let title: String
+    let primary: Bool
+    let slug: String
+    let link: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case title
+        case primary
+        case slug
+        case link
     }
 }

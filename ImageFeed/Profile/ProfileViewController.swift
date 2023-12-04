@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
@@ -26,7 +27,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.DidChangeNotification,
+            forName: ProfileImageService.didChangeNotification,
             object: nil,
             queue: .main,
             using: { [weak self] _ in
@@ -44,12 +45,13 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        // TODO: [Sprint 11] Обновить аватар, используя Kingfisher
+        guard let url = ProfileImageService.shared.avatarURL else {
+            print("return")
+            return
+        }
+        profileImage.kf.setImage(with: url)
     }
+    
     private func updateProfileDetails(profile: Profile?) {
         nameLabel.text = profile?.name
         nickNameLabel.text = profile?.loginName

@@ -5,7 +5,7 @@
 //  Created by Irina Golubinskaya on 05.10.2023.
 //
 
-import Foundation
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
     
@@ -13,11 +13,13 @@ final class OAuth2TokenStorage {
         case token
     }
     
-    var token: String? {
+    var token: String? { 
         get {
-            UserDefaults.standard.string(forKey: Keys.token.rawValue)
+            KeychainWrapper.standard.string(forKey: Keys.token.rawValue)
         } set {
-            UserDefaults.standard.set(newValue, forKey: Keys.token.rawValue)
+            guard let newValue = newValue else { return }
+            let isSuccess = KeychainWrapper.standard.set(newValue, forKey: Keys.token.rawValue)
+            guard isSuccess else { return }
         }
     }
 }
