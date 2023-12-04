@@ -30,7 +30,7 @@ final class ProfileImageService {
         
         print("request.url?.absoluteString",request.url?.absoluteString)
         
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
                 

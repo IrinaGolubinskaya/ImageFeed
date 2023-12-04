@@ -75,6 +75,7 @@ struct ProfileResult: Decodable {
     let firstName: String?
     let lastName: String?
     let bio: String?
+    let profileImage: ProfileImage?
 
     private func getProfileResult(from jsonString: String) -> ProfileResult? {
         guard let data = jsonString.data(using: .utf8) else { return nil }
