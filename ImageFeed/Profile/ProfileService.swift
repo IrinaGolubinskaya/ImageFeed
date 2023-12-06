@@ -76,15 +76,13 @@ struct ProfileResult: Decodable {
     let lastName: String?
     let bio: String?
     let profileImage: ProfileImage?
-
-    private func getProfileResult(from jsonString: String) -> ProfileResult? {
-        guard let data = jsonString.data(using: .utf8) else { return nil }
-        do {
-            let profileResponse = try JSONDecoder().decode(ProfileResult.self, from: data)
-            return profileResponse
-        } catch {
-            return nil
-        }
+    
+    private enum CodingKeys: String, CodingKey {
+        case username
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case bio
+        case profileImage = "profile_image"
     }
 }
 
