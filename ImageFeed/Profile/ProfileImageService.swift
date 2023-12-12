@@ -19,6 +19,11 @@ final class ProfileImageService {
         return OAuth2TokenStorage().token
     }
     
+    private init(avatarURL: URL? = nil, task: URLSessionTask? = nil) {
+        self.avatarURL = avatarURL
+        self.task = task
+    }
+    
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         task?.cancel()

@@ -17,6 +17,11 @@ final class ProfileService {
     
     private(set) var profile: Profile?
     
+    private init(task: URLSessionTask? = nil, profile: Profile? = nil) {
+        self.task = task
+        self.profile = profile
+    }
+    
     private func makeRequest()-> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)

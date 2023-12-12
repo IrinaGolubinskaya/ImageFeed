@@ -57,7 +57,7 @@ final class WebViewViewController: UIViewController {
                             forKeyPath: #keyPath(WKWebView.estimatedProgress),
                             options: .new,
                             context: nil)
-        self.updateProgress()
+        updateProgress()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

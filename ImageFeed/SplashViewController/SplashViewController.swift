@@ -97,7 +97,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 }
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                self.getAlert()
+                self.showErrorAlert()
                 break
             }
         }
@@ -114,13 +114,13 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                self.getAlert()
+                self.showErrorAlert()
             }
             completion()
         }
     }
     
-    private func getAlert() {
+    private func showErrorAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)

@@ -49,6 +49,10 @@ final class ProfileViewController: UIViewController {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(profileImageServiceObserver)
+    }
+    
     private func updateAvatar() {
         guard let url = ProfileImageService.shared.avatarURL else {
             print("аватар нил")

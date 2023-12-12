@@ -9,13 +9,6 @@ import Foundation
 
 final class OAuth2Service {
     
-    private let urlSession = URLSession.shared
-    
-    static let shared = OAuth2Service()
-    
-    private var task : URLSessionTask?
-    private var lastCode: String? /// код необходимый для создания токена
-    
     private(set) var authToken: String? {
         get {
             return OAuth2TokenStorage().token
@@ -29,12 +22,24 @@ final class OAuth2Service {
         OAuth2TokenStorage().token != nil
     }
     
+    static let shared = OAuth2Service()
+    
+    private let urlSession = URLSession.shared
+    private var task : URLSessionTask?
+    private var lastCode: String? /// код необходимый для создания токена
+    
+    
+    private init(task: URLSessionTask? = nil, lastCode: String? = nil) {
+        self.task = task
+        self.lastCode = lastCode
+    }
+    
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>)-> Void) {
         assert(Thread.isMainThread)
         if lastCode == code { return }
         task?.cancel()
         lastCode = code
-        let request = makeAuthTokenRequest(code: code)
+        guard let request = makeAuthTokenRequest(code: code) else { return }
         let task = urlSession.objectTask(for: request) { [weak self] (result:Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             switch result {
@@ -55,8 +60,9 @@ final class OAuth2Service {
 
 extension OAuth2Service {
     
-    private func makeAuthTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
+    private func makeAuthTokenRequest(code: String) -> URLRequest? {
+        guard let baseURL = URL(string: Constants.unsplashBaseURLString) else { return nil }
+        return  URLRequest.makeHTTPRequest(
             path: "/oauth/token"
             + "?client_id=\(Constants.accessKey)"
             + "&&client_secret=\(Constants.secretKey)"
@@ -64,7 +70,7 @@ extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: Constants.unsplashBaseURLString)!
+            baseURL: baseURL
         )
     }
 }
@@ -72,10 +78,11 @@ extension OAuth2Service {
 extension URLRequest {
     static func makeHTTPRequest(
         path: String,
-        httpMethod:String,
-        baseURL: URL = URL(string: Constants.defaultBaseURLString)!
-    )-> URLRequest {
-        var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
+        httpMethod: String,
+        baseURL: URL
+    )-> URLRequest? {
+        guard let url = URL(string: path, relativeTo: baseURL) else { return nil }
+        var request = URLRequest(url: url)
         request.httpMethod = httpMethod
         return request
     }
