@@ -32,11 +32,10 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         if oauth2Service.isAuthorized {
             UIBlockingProgressHUD.show()
             if let token = oauth2TokenStorage.token {
-                fetchProfile(token: token)
+                fetchProfile(token: token) { }
             }
         } else {
             showAuthVC()
@@ -93,9 +92,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let token):
-                self.fetchProfile(token: token)
-                self.switchToTabBarController()
-                UIBlockingProgressHUD.dismiss()
+                self.fetchProfile(token: token) {
+                    UIBlockingProgressHUD.dismiss()
+                }
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 self.getAlert()
@@ -104,7 +103,7 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
     }
     
-    private func fetchProfile(token:String) {
+    private func fetchProfile(token:String, completion: @escaping () -> Void) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -117,6 +116,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 UIBlockingProgressHUD.dismiss()
                 self.getAlert()
             }
+            completion()
         }
     }
     
@@ -124,8 +124,11 @@ extension SplashViewController: AuthViewControllerDelegate {
         let alert = UIAlertController(title: "Что-то пошло не так",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)
-        let actionAlert = UIAlertAction(title: "Ок", style: .cancel)
-        alert.addAction(actionAlert)
-        present(alert,animated: true)
+        let alertAction = UIAlertAction(title: "Ок", style: .default)
+        alert.addAction(alertAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert,animated: true)
+        }
     }
 }

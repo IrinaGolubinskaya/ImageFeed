@@ -32,7 +32,6 @@ final class ProfileImageService {
             switch result {
                 
             case .success(let userResult):
-                dump(userResult)
                 guard let mediumPhoto = userResult.profileImage?.medium else { return }
                 self.avatarURL = URL(string: mediumPhoto)
                 completion(.success(mediumPhoto))

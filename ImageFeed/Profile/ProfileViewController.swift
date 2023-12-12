@@ -34,12 +34,12 @@ final class ProfileViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateAvatar()
             })
-        
-        updateAvatar()
+        view.backgroundColor = .ypBlack
         addProfilePhoto()
         addProfileName()
         addNickName()
         addStatusLabel()
+        updateAvatar()
         addLogoutButton()
         updateProfileDetails(profile: profileService.profile)
     }
@@ -50,7 +50,10 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        guard let url = ProfileImageService.shared.avatarURL else { return }
+        guard let url = ProfileImageService.shared.avatarURL else {
+            print("аватар нил")
+            return
+        }
         profileImage.kf.setImage(with: url)
     }
     
@@ -61,8 +64,6 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addProfilePhoto() {
-        let image = UIImage(named: "userPhoto")
-        profileImage.image = image
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileImage)
         profileImage.clipsToBounds = true
