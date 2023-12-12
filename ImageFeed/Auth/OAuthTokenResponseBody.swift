@@ -20,7 +20,7 @@ struct OAuthTokenResponseBody: Decodable {
         case createdAt = "created_at"
     }
     
-    func getResponce(from jsonString: String) -> OAuthTokenResponseBody? {
+    private func getResponce(from jsonString: String) -> OAuthTokenResponseBody? {
         guard let data = jsonString.data(using: .utf8) else { return nil }
         do {
             let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)

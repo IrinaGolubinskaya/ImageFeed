@@ -13,7 +13,7 @@ final class OAuth2Service {
     
     static let shared = OAuth2Service()
     
-    private var task : URLSessionTask? /// ОБЪЕКТ ДЛЯ РАБОТЫ С ЗАПРОСАМИ. Может быть только 1 запрос  одновременно
+    private var task : URLSessionTask?
     private var lastCode: String? /// код необходимый для создания токена
     
     private(set) var authToken: String? {
@@ -23,6 +23,10 @@ final class OAuth2Service {
         set {
             OAuth2TokenStorage().token = newValue
         }
+    }
+    
+    var isAuthorized: Bool {
+        OAuth2TokenStorage().token != nil
     }
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>)-> Void) {
@@ -50,20 +54,6 @@ final class OAuth2Service {
 }
 
 extension OAuth2Service {
-//    private func object(
-//        for request: URLRequest,
-//        completion: @escaping( Result<OAuthTokenResponseBody, Error>) -> Void
-//    ) -> URLSessionTask {
-//        let decoder = JSONDecoder()
-//        return urlSession.data(for: request) { (result: Result<Data,Error>) in
-//            let response = result.flatMap { data -> Result< OAuthTokenResponseBody,Error> in
-//                Result {
-//                    try decoder.decode(OAuthTokenResponseBody.self, from: data)
-//                }
-//            }
-//            completion(response)
-//        }
-//    }
     
     private func makeAuthTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(

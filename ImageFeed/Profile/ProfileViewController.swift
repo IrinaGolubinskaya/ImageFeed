@@ -10,12 +10,12 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
-
-    let nameLabel = UILabel()
-    let profileImage = UIImageView()
-    let nickNameLabel = UILabel()
-    let descriptionLabel = UILabel()
-    let logoutButton = UIButton()
+    
+    private let nameLabel = UILabel()
+    private let profileImage = UIImageView()
+    private let nickNameLabel = UILabel()
+    private let descriptionLabel = UILabel()
+    private let logoutButton = UIButton()
     
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -34,6 +34,7 @@ final class ProfileViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateAvatar()
             })
+        
         updateAvatar()
         addProfilePhoto()
         addProfileName()
@@ -41,14 +42,15 @@ final class ProfileViewController: UIViewController {
         addStatusLabel()
         addLogoutButton()
         updateProfileDetails(profile: profileService.profile)
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
     }
     
     private func updateAvatar() {
-        guard let url = ProfileImageService.shared.avatarURL else {
-            print("return")
-            return
-        }
+        guard let url = ProfileImageService.shared.avatarURL else { return }
         profileImage.kf.setImage(with: url)
     }
     
@@ -57,13 +59,12 @@ final class ProfileViewController: UIViewController {
         nickNameLabel.text = profile?.loginName
         descriptionLabel.text = profile?.bio
     }
-
+    
     private func addProfilePhoto() {
         let image = UIImage(named: "userPhoto")
         profileImage.image = image
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileImage)
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
         profileImage.clipsToBounds = true
         
         NSLayoutConstraint.activate([

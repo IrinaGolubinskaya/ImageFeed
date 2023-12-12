@@ -25,11 +25,8 @@ final class ProfileImageService {
         
         guard let request = makeRequest(username: username) else { return
             assertionFailure("Не верный запрос")
-            // TODO: написать конкретно ошибку и вызвать комплишн с кейсом из энама с ошибкой invalidRequest
         }
-        
-        print("request.url?.absoluteString",request.url?.absoluteString)
-        
+                
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
@@ -57,21 +54,6 @@ final class ProfileImageService {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         return request
-    }
-
-    private func object(
-        for request: URLRequest,
-        completion: @escaping( Result<UserResult, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return URLSession.shared.data(for: request) { (result: Result<Data,Error>) in
-            let response = result.flatMap { data -> Result< UserResult,Error> in
-                Result {
-                    try decoder.decode(UserResult.self, from: data)
-                }
-            }
-            completion(response)
-        }
     }
 }
 

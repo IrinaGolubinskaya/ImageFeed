@@ -53,21 +53,6 @@ final class ProfileService {
         self.task = task
         task.resume()
     }
-    
-    private func object(
-        for request: URLRequest,
-        completion: @escaping( Result<ProfileResult, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return URLSession.shared.data(for: request) { (result: Result<Data,Error>) in
-            let response = result.flatMap { data -> Result< ProfileResult,Error> in
-                Result {
-                    try decoder.decode(ProfileResult.self, from: data)
-                }
-            }
-            completion(response)
-        }
-    }
 }
 
 struct ProfileResult: Decodable {

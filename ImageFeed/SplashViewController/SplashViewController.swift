@@ -11,6 +11,14 @@ import SwiftKeychainWrapper
 
 final class SplashViewController: UIViewController {
     
+    private let splashScreenLogoImage: UIImageView = {
+        let imageView = UIImageView()
+        let image = UIImage(named: "logoForUnsplash")
+        imageView.image = image
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
@@ -19,40 +27,45 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let token = oauth2TokenStorage.token {
-            fetchProfile(token: token)
-        }
+        setupViewsVC()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //let removeSuccessful: Bool = KeychainWrapper.standard.removeAllKeys()
-//        if let _ = oauth2TokenStorage.token {
-//            switchToTabBarController()
-//        } else {
-//            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
-//        }
+        
+        if oauth2Service.isAuthorized {
+            UIBlockingProgressHUD.show()
+            if let token = oauth2TokenStorage.token {
+                fetchProfile(token: token)
+            }
+        } else {
+            showAuthVC()
+        }
+    }
+    
+    private func setupViewsVC() {
+        view.backgroundColor = .ypBlack
+        view.addSubview(splashScreenLogoImage)
+        NSLayoutConstraint.activate([
+            splashScreenLogoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashScreenLogoImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            splashScreenLogoImage.widthAnchor.constraint(equalToConstant: 75),
+            splashScreenLogoImage.heightAnchor.constraint(equalToConstant: 77.68),
+        ])
+    }
+    
+    private func showAuthVC() {
+        let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewController")
+        guard let authViewController = viewController as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated:  true)
     }
 }
 
 // MARK: - prepare for segue
 
 extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == showAuthenticationScreenSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                return
-            }
-            
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
     
     func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { return }

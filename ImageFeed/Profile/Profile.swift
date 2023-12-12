@@ -9,10 +9,10 @@ import Foundation
 
 struct Profile: Codable {
     let username: String
-    let name: String // first name +" "+ last name
-    let loginName: String // username со знаком @ перед первым символом
+    let name: String
+    let loginName: String
     let bio: String?
-
+    
     init(username: String, firstName: String, lastName: String, bio: String?) {
         self.username = username
         self.name = "\(firstName) \(lastName)"

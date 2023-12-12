@@ -27,4 +27,3 @@ extension ImageListCell {
         favouriteButton.setImage(likeImage, for: .normal)
     }
 }
-
