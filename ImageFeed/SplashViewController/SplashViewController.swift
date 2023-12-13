@@ -9,6 +9,11 @@ import UIKit
 import ProgressHUD
 import SwiftKeychainWrapper 
 
+
+protocol SplashAlertDelegate: AnyObject {
+    func showErrorAlert(alert: UIAlertController)
+}
+
 final class SplashViewController: UIViewController {
     
     private let splashScreenLogoImage: UIImageView = {
@@ -18,6 +23,8 @@ final class SplashViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
+    weak var delegate: SplashAlertDelegate?
     
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2TokenStorage = OAuth2TokenStorage()
@@ -56,6 +63,7 @@ final class SplashViewController: UIViewController {
     private func showAuthVC() {
         let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewController")
         guard let authViewController = viewController as? AuthViewController else { return }
+        delegate = authViewController as? any SplashAlertDelegate
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated:  true)
@@ -97,7 +105,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 }
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                self.showErrorAlert()
+                self.delegate?.showErrorAlert(alert: self.getErrorAlert())
                 break
             }
         }
@@ -114,21 +122,19 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                self.showErrorAlert()
+                self.present(self.getErrorAlert(), animated: true)
             }
             completion()
         }
     }
     
-    private func showErrorAlert() {
+    private func getErrorAlert() -> UIAlertController {
         let alert = UIAlertController(title: "Что-то пошло не так",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Ок", style: .default)
         alert.addAction(alertAction)
         
-        DispatchQueue.main.async {
-            self.present(alert,animated: true)
-        }
+        return alert
     }
 }

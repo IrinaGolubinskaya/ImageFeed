@@ -42,3 +42,11 @@ extension AuthViewController: WebViewViewControllerDelegate {
         dismiss(animated: true)
     }
 }
+
+// MARK: -
+
+extension AuthViewController: SplashAlertDelegate {
+    func showErrorAlert(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+}
