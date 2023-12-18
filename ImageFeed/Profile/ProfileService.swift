@@ -22,7 +22,7 @@ final class ProfileService {
         self.profile = profile
     }
     
-    private func makeRequest()-> URLRequest? {
+    private func makeRequest() -> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
