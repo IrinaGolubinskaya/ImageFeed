@@ -6,13 +6,18 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    let nameLabel = UILabel()
-    let profileImage = UIImageView()
-    let nickNameLabel = UILabel()
-    let statusLabel = UILabel()
-    let logoutButton = UIButton()
+    private let profileService = ProfileService.shared
+    
+    private let nameLabel = UILabel()
+    private let profileImage = UIImageView()
+    private let nickNameLabel = UILabel()
+    private let descriptionLabel = UILabel()
+    private let logoutButton = UIButton()
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -20,19 +25,51 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main,
+            using: { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            })
+        view.backgroundColor = .ypBlack
         addProfilePhoto()
         addProfileName()
         addNickName()
         addStatusLabel()
+        updateAvatar()
         addLogoutButton()
+        updateProfileDetails(profile: profileService.profile)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(profileImageServiceObserver)
+    }
+    
+    private func updateAvatar() {
+        guard let url = ProfileImageService.shared.avatarURL else {
+            print("аватар нил")
+            return
+        }
+        profileImage.kf.setImage(with: url)
+    }
+    
+    private func updateProfileDetails(profile: Profile?) {
+        nameLabel.text = profile?.name
+        nickNameLabel.text = profile?.loginName
+        descriptionLabel.text = profile?.bio
     }
     
     private func addProfilePhoto() {
-        let image = UIImage(named: "userPhoto")
-        profileImage.image = image
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileImage)
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
         profileImage.clipsToBounds = true
         
         NSLayoutConstraint.activate([
@@ -75,17 +112,17 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addStatusLabel() {
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusLabel)
-        statusLabel.text = "Hello, world!"
-        statusLabel.textColor = .ypWhite
-        statusLabel.font.withSize(13)
-        statusLabel.numberOfLines = 0
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(descriptionLabel)
+        descriptionLabel.text = "Hello, world!"
+        descriptionLabel.textColor = .ypWhite
+        descriptionLabel.font.withSize(13)
+        descriptionLabel.numberOfLines = 0
         
         NSLayoutConstraint.activate([
-            statusLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            statusLabel.topAnchor.constraint(equalTo: nickNameLabel.bottomAnchor, constant: 8),
-            statusLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            descriptionLabel.topAnchor.constraint(equalTo: nickNameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
     

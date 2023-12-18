@@ -8,13 +8,20 @@
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+    func authViewController(
+        _ vc: AuthViewController,
+        didAuthenticateWithCode code: String
+    )
 }
 
 final class AuthViewController: UIViewController {
     
     private let showWebViewSegueIdentifier = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
@@ -33,5 +40,13 @@ extension AuthViewController: WebViewViewControllerDelegate {
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+}
+
+// MARK: -
+
+extension AuthViewController: SplashAlertDelegate {
+    func showErrorAlert(alert: UIAlertController) {
+        present(alert, animated: true)
     }
 }

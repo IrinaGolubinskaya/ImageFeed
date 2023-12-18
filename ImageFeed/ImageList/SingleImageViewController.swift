@@ -8,7 +8,7 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-
+    
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
@@ -33,7 +33,10 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction func shareButtonAction(_ sender: Any) {
-        let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        let share = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
         present(share,animated: true)
     }
     
