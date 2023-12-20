@@ -9,9 +9,10 @@ import Foundation
 
 final class ImagesListService {
     
+    static let shared = ImagesListService()
+    
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
-    
     private var task: URLSessionTask?
     
     private lazy var dateFormatter: DateFormatter = {
@@ -31,24 +32,34 @@ final class ImagesListService {
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         task?.cancel()
         
-        guard let request = makeRequest() else { return }
+        guard let request = makeRequest() else {
+            return
+        }
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<[PhotoResult], Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let photoResult):
+                
                 let photos = photoResult.compactMap { photoResult in
-                    return Photo(id: photoResult.id!,
-                                 size: CGSize(width: photoResult.width!, height: photoResult.height!),
-                                 createdAt: self.dateFormatter.date(from: photoResult.created_at!),
-                                 welcomeDescription: photoResult.description!,
-                                 thumbImageURL: photoResult.urls!.thumb!,
-                                 largeImageURL: photoResult.urls!.full!,
-                                 isLiked: photoResult.liked_by_user!
+                    return Photo(id: photoResult.id ?? "",
+                                 size: CGSize(width: photoResult.width ?? .zero, height: photoResult.height ?? .zero),
+                                 createdAt: self.dateFormatter.date(from: photoResult.created_at ?? ""),
+                                 welcomeDescription: photoResult.description,
+                                 thumbImageURL: photoResult.urls?.thumb ?? "",
+                                 largeImageURL: photoResult.urls?.full ?? "",
+                                 isLiked: photoResult.liked_by_user ?? false
                     )
                 }
                 DispatchQueue.main.async { [weak self] in
                     self?.photos.append(contentsOf: photos)
+                    
+                    if self?.lastLoadedPage != nil {
+                        self?.lastLoadedPage! += 1
+                    } else {
+                        self?.lastLoadedPage = 1
+                    }
+                    
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
                 }
             case .failure(let error):
@@ -60,20 +71,42 @@ final class ImagesListService {
         task.resume()
     }
     
-    private func makeRequest() -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos") else { return nil }
+    private func makeRequest() -> URLRequest? { // ag-TODO: - Работающий метод
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos") else {
+            return nil
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        
         if let token = authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        
+
         let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1
         request.setValue(lastLoadedPage?.description, forHTTPHeaderField: "page")
-    
+
         return request
     }
+    
+//    private func makeRequest() -> URLRequest? { // ag-TODO: - Новый метод
+//        guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
+//              let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
+//            return nil
+//        }
+//
+//        if #available(iOS 16.0, *) {
+//            url.append(queryItems: [URLQueryItem(name: "page", value: lastLoadedPage.description)])
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "GET"
+//        if let token = authToken {
+//            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+//        }
+//
+//        return request
+//    }
 }
 
 struct PhotoResult: Codable {
