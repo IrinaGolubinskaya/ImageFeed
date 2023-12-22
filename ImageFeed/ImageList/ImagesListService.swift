@@ -29,7 +29,6 @@ final class ImagesListService {
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
     func fetchPhotosNextPage() {
-        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         task?.cancel()
         
         guard let request = makeRequest() else {
@@ -71,42 +70,42 @@ final class ImagesListService {
         task.resume()
     }
     
-    private func makeRequest() -> URLRequest? { // ag-TODO: - Работающий метод
-        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos") else {
-            return nil
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        if let token = authToken {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-
-        let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1
-        request.setValue(lastLoadedPage?.description, forHTTPHeaderField: "page")
-
-        return request
-    }
-    
-//    private func makeRequest() -> URLRequest? { // ag-TODO: - Новый метод
-//        guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
-//              let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
+//    private func makeRequest() -> URLRequest? { // ag-TODO: - Работающий метод
+//        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos") else {
 //            return nil
 //        }
-//
-//        if #available(iOS 16.0, *) {
-//            url.append(queryItems: [URLQueryItem(name: "page", value: lastLoadedPage.description)])
-//        } else {
-//            // Fallback on earlier versions
-//        }
-//
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "GET"
 //        if let token = authToken {
 //            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 //        }
 //
+//        let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1
+//        request.setValue(lastLoadedPage?.description, forHTTPHeaderField: "page")
+//
 //        return request
 //    }
+    
+    private func makeRequest() -> URLRequest? { // ag-TODO: - Новый метод
+        guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
+              let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
+            return nil
+        }
+
+        if #available(iOS 16.0, *) {
+            url.append(queryItems: [URLQueryItem(name: "page", value: lastLoadedPage.description)])
+        } else {
+            // Fallback on earlier versions
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if let token = authToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        return request
+    }
 }
 
 struct PhotoResult: Codable {
