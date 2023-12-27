@@ -49,6 +49,8 @@ final class ProfileImageService {
         task.resume()
     }
     
+    
+    
     private func makeRequest(username: String) -> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)

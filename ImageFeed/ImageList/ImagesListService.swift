@@ -70,23 +70,51 @@ final class ImagesListService {
         task.resume()
     }
     
-//    private func makeRequest() -> URLRequest? { // ag-TODO: - Работающий метод
-//        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos") else {
-//            return nil
-//        }
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "GET"
-//        if let token = authToken {
-//            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-//        }
-//
-//        let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1
-//        request.setValue(lastLoadedPage?.description, forHTTPHeaderField: "page")
-//
-//        return request
-//    }
+    func changeLike(
+        photoId: String,
+        isLiked: Bool,
+        _ completion: @escaping (Result<Void, Error>
+        ) -> Void) {
+        guard let request = makeLikeRequest(id: photoId, isLiked: isLiked) else {
+            return
+        }
+        
+        let task = URLSession.shared.objectTask(for: request) { [weak self]
+            (result:Result<PhotoResult, Error>) in
+            guard let self else { return }
+            switch result {
+            case .success(let photoResult):
+                if let index = self.photos.firstIndex(where:  {$0.id == photoId }) {
+                    DispatchQueue.main.async { [ weak self] in
+                        guard let self else { return }
+                        self.photos[index].changeLike()
+                        completion(.success(()))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+            
+        }
+        task.resume()
+    }
     
-    private func makeRequest() -> URLRequest? { // ag-TODO: - Новый метод
+    private func makeLikeRequest(id: String, isLiked: Bool) -> URLRequest? {
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos/\(id)/like") else {
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = isLiked ? "DELETE" : "POST"
+        
+        if let token = authToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        return request
+    }
+
+    private func makeRequest() -> URLRequest? {
         guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
               let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
             return nil
@@ -138,5 +166,9 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
-    let isLiked: Bool
+    var isLiked: Bool
+    
+    mutating func changeLike() {
+        isLiked = isLiked ? false : true
+    }
 }

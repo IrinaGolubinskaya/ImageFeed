@@ -91,8 +91,8 @@ extension ImagesListViewController: UITableViewDataSource {
         if let url = URL(string: photos[indexPath.row].thumbImageURL) {
             let date = dateFormatter.string(from: photos[indexPath.row].createdAt ?? Date())
             let isLiked = photos[indexPath.row].isLiked
-            
-            imageListCell.configure(url: url, date: date, isLiked: isLiked)
+            let photoId = photos[indexPath.row].id
+            imageListCell.configure(url: url, date: date, isLiked: isLiked, photoId: photoId)
         }
         return imageListCell
     }

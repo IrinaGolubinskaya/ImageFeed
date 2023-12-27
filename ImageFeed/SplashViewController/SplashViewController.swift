@@ -106,7 +106,6 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 self.delegate?.showErrorAlert(alert: self.getErrorAlert())
-                break
             }
         }
     }
