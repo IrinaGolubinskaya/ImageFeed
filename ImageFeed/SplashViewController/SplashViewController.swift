@@ -63,7 +63,7 @@ final class SplashViewController: UIViewController {
     private func showAuthVC() {
         let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewController")
         guard let authViewController = viewController as? AuthViewController else { return }
-        delegate = authViewController as? any SplashAlertDelegate
+        delegate = authViewController
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated:  true)
@@ -98,6 +98,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     private func fetchToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token) {
@@ -113,6 +114,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     private func fetchProfile(token:String, completion: @escaping () -> Void) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(_):
                 guard let userName = self.profileService.profile?.username else { return }

@@ -41,6 +41,7 @@ final class ProfileService {
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<ProfileResult, Error>) in
             guard let self = self else { return }
+            
             switch result {
             case .success(let profileResult):
                 let profile = Profile(
@@ -55,6 +56,7 @@ final class ProfileService {
                 completion(.failure(error))
             }
         }
+        
         self.task = task
         task.resume()
     }

@@ -15,13 +15,6 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMMM yyyy"
-        formatter.locale = Locale(identifier: "ru_RU")
-        return formatter
-    }()
-    
     private var authToken: String? {
         return OAuth2TokenStorage().token
     }
@@ -34,38 +27,42 @@ final class ImagesListService {
         guard let request = makeRequest() else {
             return
         }
+        
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<[PhotoResult], Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let photoResult):
                 
+                let dateFormatter = ISO8601DateFormatter()
+                
                 let photos = photoResult.compactMap { photoResult in
                     return Photo(id: photoResult.id ?? "",
                                  size: CGSize(width: photoResult.width ?? .zero, height: photoResult.height ?? .zero),
-                                 createdAt: self.dateFormatter.date(from: photoResult.created_at ?? ""),
+                                 createdAt: dateFormatter.date(from: photoResult.created_at ?? ""),
                                  welcomeDescription: photoResult.description,
                                  thumbImageURL: photoResult.urls?.thumb ?? "",
                                  largeImageURL: photoResult.urls?.full ?? "",
                                  isLiked: photoResult.liked_by_user ?? false
                     )
                 }
+                
                 DispatchQueue.main.async { [weak self] in
                     self?.photos.append(contentsOf: photos)
                     
                     if self?.lastLoadedPage != nil {
                         self?.lastLoadedPage! += 1
                     } else {
-                        self?.lastLoadedPage = 1
+                        self?.lastLoadedPage = 2
                     }
                     
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
                 }
-            case .failure(let error):
+            case .failure(_):
                 break
-                //TODO: delete , add completion
             }
         }
+        
         self.task = task
         task.resume()
     }
@@ -83,7 +80,7 @@ final class ImagesListService {
             (result:Result<PhotoResult, Error>) in
             guard let self else { return }
             switch result {
-            case .success(let photoResult):
+            case .success(_):
                 if let index = self.photos.firstIndex(where:  {$0.id == photoId }) {
                     DispatchQueue.main.async { [ weak self] in
                         guard let self else { return }
@@ -113,25 +110,25 @@ final class ImagesListService {
         
         return request
     }
-
+    
     private func makeRequest() -> URLRequest? {
         guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
               let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
             return nil
         }
-
+        
         if #available(iOS 16.0, *) {
             url.append(queryItems: [URLQueryItem(name: "page", value: lastLoadedPage.description)])
         } else {
-            // Fallback on earlier versions
+            
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         if let token = authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-
+        
         return request
     }
 }

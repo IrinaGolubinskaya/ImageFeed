@@ -6,19 +6,18 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class ImagesListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
     private var imageListServiceObserver: NSObjectProtocol?
-
+    
     private let imagesListService = ImagesListService.shared
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
-    
-   // private let photosName: [String] = Array(0..<20).map{"\($0)" }
-    
+        
     var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
@@ -55,12 +54,12 @@ final class ImagesListViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
             return
         }
-        //TODO: - сделать переход на отдельный экран к 1 фотографии
-//        let image = UIImage(named: photos[indexPath.row])
-//        viewController.image = image
+        
+        let url = URL(string: photos[indexPath.row].largeImageURL)
+        viewController.url = url
     }
     
-  private func updateTableViewAnimated() {
+    private func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos
@@ -87,12 +86,13 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImageListCell else {
             return UITableViewCell()
         }
-    
+        
+        imageListCell.delegate = self
         if let url = URL(string: photos[indexPath.row].thumbImageURL) {
             let date = dateFormatter.string(from: photos[indexPath.row].createdAt ?? Date())
             let isLiked = photos[indexPath.row].isLiked
-            let photoId = photos[indexPath.row].id
-            imageListCell.configure(url: url, date: date, isLiked: isLiked, photoId: photoId)
+            
+            imageListCell.configure(url: url, date: date, isLiked: isLiked)
         }
         return imageListCell
     }
@@ -107,16 +107,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        guard let image = UIImage(named: photosName[indexPath.row]) else {
-//            return 0
-//        }
-//        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-//        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-//        let imageWidth = image.size.width
-//        let scale = imageViewWidth / imageWidth
-//        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
-//        return cellHeight
-        let photo = photos[indexPath.row] 
+        let photo = photos[indexPath.row]
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = photo.size.width
@@ -125,11 +116,32 @@ extension ImagesListViewController: UITableViewDelegate {
         return cellHeight
     }
     
-    ///Вызывается прямо перед тем, как ячейка таблицы будет показана на экране. В этом методе можно проверить условие indexPath.row + 1 == photos.count, и если оно верно — вызывать fetchPhotosNextPage(). Нужно сделать так, чтобы многократные вызовы fetchPhotosNextPage() были «дешёвыми» по ресурсам и не приводили к прерыванию текущего сетевого запроса.
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == photos.count {
             imagesListService.fetchPhotosNextPage()
         }
-    
+        
+    }
+}
+
+extension ImagesListViewController: ImageListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImageListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLiked: photo.isLiked) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success():
+                DispatchQueue.main.async {
+                    cell.setIsLiked(isLiked: !photo.isLiked)
+                    self.photos[indexPath.row].changeLike()
+                    UIBlockingProgressHUD.dismiss()
+                }
+            case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
+                print(error)
+            }
+        }
     }
 }

@@ -8,9 +8,11 @@
 import UIKit
 import Kingfisher
 
+protocol ImageListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImageListCell)
+}
+
 final class ImageListCell: UITableViewCell {
-    
-    let imagesListService = ImagesListService.shared
     
     @IBOutlet private weak var mainImageView: UIImageView!
     @IBOutlet private weak var dateLabel: UILabel!
@@ -18,9 +20,8 @@ final class ImageListCell: UITableViewCell {
     @IBOutlet private weak var gradientView: UIView!
     
     static let reuseIdentifier = "ImageListCell"
-
-    var photoId: String?
-    var isLiked: Bool?
+    
+    weak var delegate: ImageListCellDelegate?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -29,38 +30,23 @@ final class ImageListCell: UITableViewCell {
         mainImageView.image = nil
     }
     
-    @IBAction func favouriteButtonActive(_ sender: Any) {
-        changeLikeButton()
+    func setIsLiked(isLiked: Bool) {
+        let likeImage = isLiked ? UIImage(named: "activeFavourite") : UIImage(named: "favourite")
+        self.favouriteButton.setImage(likeImage, for: .normal)
     }
     
-    private func changeLikeButton() {
-        guard let photoId = photoId else { return }
-        guard let isLiked = isLiked else { return }
-        imagesListService.changeLike(photoId: photoId, isLiked: isLiked) { result in
-            switch result {
-            case .success():
-                DispatchQueue.main.async {
-                    self.isLiked = !isLiked
-                    let likeImage = isLiked ? UIImage(named: "activeFavourite") : UIImage(named: "favourite")
-                    self.favouriteButton.setImage(likeImage, for: .normal)
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+    @IBAction func favouriteButtonActive(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
     }
 }
 
 extension ImageListCell {
     
-    func configure(url: URL, date: String, isLiked: Bool, photoId: String) {
+    func configure(url: URL, date: String, isLiked: Bool) {
         mainImageView.kf.indicatorType = .activity
         mainImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeHolder")) { [weak self] result in
-            //TODO: - вызвать обновление из VC
         }
         dateLabel.text = date
-        self.photoId = photoId
-        self.isLiked = isLiked
         let likeImage = isLiked ? UIImage(named: "activeFavourite") : UIImage(named: "favourite")
         favouriteButton.setImage(likeImage, for: .normal)
     }

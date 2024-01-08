@@ -10,7 +10,7 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
-    
+    private let tokenStorage = OAuth2TokenStorage()
     private let nameLabel = UILabel()
     private let profileImage = UIImageView()
     private let nickNameLabel = UILabel()
@@ -130,10 +130,29 @@ final class ProfileViewController: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "logout"), for: .normal)
+        logoutButton.addTarget(nil, action: #selector(showLogoutAlert), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             logoutButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
         ])
+    }
+    
+    @objc private func showLogoutAlert() {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены что хотите выйти?",
+                                      preferredStyle: .alert)
+        let closeAlertAction = UIAlertAction(title: "Нет", style: .cancel)
+        let logoutAlertAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.tokenStorage.deleteToken()
+            OAuth2TokenStorage.clean()
+            
+            guard let window = UIApplication.shared.windows.first else { return }
+            window.rootViewController = SplashViewController()
+        }
+        
+        alert.addAction(closeAlertAction)
+        alert.addAction(logoutAlertAction)
+        present(alert, animated:  true)
     }
 }
