@@ -6,7 +6,6 @@
 //
 
 import SwiftKeychainWrapper
-import WebKit
 
 final class OAuth2TokenStorage {
     
@@ -27,14 +26,5 @@ final class OAuth2TokenStorage {
     func deleteToken() {
         token = nil
         KeychainWrapper.standard.removeObject(forKey: Keys.token.rawValue)
-    }
-    
-    static func clean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
     }
 }

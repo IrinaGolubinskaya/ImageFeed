@@ -14,8 +14,8 @@ final class SingleImageViewController: UIViewController {
     
     var url: URL?
     
-    @IBOutlet var fullImageView: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private var fullImageView: UIImageView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent

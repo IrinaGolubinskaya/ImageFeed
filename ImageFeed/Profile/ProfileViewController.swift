@@ -145,7 +145,7 @@ final class ProfileViewController: UIViewController {
         let closeAlertAction = UIAlertAction(title: "Нет", style: .cancel)
         let logoutAlertAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             self?.tokenStorage.deleteToken()
-            OAuth2TokenStorage.clean()
+            CleanService.clean()
             
             guard let window = UIApplication.shared.windows.first else { return }
             window.rootViewController = SplashViewController()

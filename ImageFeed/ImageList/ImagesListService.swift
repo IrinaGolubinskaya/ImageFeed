@@ -14,6 +14,7 @@ final class ImagesListService {
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
+    private let dateFormatter = ISO8601DateFormatter()
     
     private var authToken: String? {
         return OAuth2TokenStorage().token
@@ -34,16 +35,14 @@ final class ImagesListService {
             switch result {
             case .success(let photoResult):
                 
-                let dateFormatter = ISO8601DateFormatter()
-                
                 let photos = photoResult.compactMap { photoResult in
                     return Photo(id: photoResult.id ?? "",
                                  size: CGSize(width: photoResult.width ?? .zero, height: photoResult.height ?? .zero),
-                                 createdAt: dateFormatter.date(from: photoResult.created_at ?? ""),
+                                 createdAt: self.dateFormatter.date(from: photoResult.createdAt ?? ""),
                                  welcomeDescription: photoResult.description,
                                  thumbImageURL: photoResult.urls?.thumb ?? "",
                                  largeImageURL: photoResult.urls?.full ?? "",
-                                 isLiked: photoResult.liked_by_user ?? false
+                                 isLiked: photoResult.likedByUser ?? false
                     )
                 }
                 
@@ -112,60 +111,26 @@ final class ImagesListService {
     }
     
     private func makeRequest() -> URLRequest? {
-        guard var url = URL(string: "\(Constants.defaultBaseURLString)/photos"),
-              let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
+        let path = "\(Constants.defaultBaseURLString)/photos"
+        
+        guard let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
             return nil
         }
         
-        if #available(iOS 16.0, *) {
-            url.append(queryItems: [URLQueryItem(name: "page", value: lastLoadedPage.description)])
-        } else {
-            
-        }
+        let items = [URLQueryItem(name: "page", value: lastLoadedPage.description)]
+        var urlComponents = URLComponents(string: path)
+        urlComponents?.queryItems = items
+        
+        guard let url = urlComponents?.url else { return nil }
+        
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        
         if let token = authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
         return request
-    }
-}
-
-struct PhotoResult: Codable {
-    let id: String?
-    let created_at: String?
-    let updated_at: String?
-    let width: Int?
-    let height: Int?
-    let color: String?
-    let blur_hash: String?
-    let likes: Int?
-    let liked_by_user: Bool?
-    let description: String?
-    let urls: UrlsResult?
-}
-
-
-struct UrlsResult: Codable {
-    let raw: String?
-    let full: String?
-    let regular: String?
-    let small: String?
-    let thumb: String?
-}
-
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    var isLiked: Bool
-    
-    mutating func changeLike() {
-        isLiked = isLiked ? false : true
     }
 }

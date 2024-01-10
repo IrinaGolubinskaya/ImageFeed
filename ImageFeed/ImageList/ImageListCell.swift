@@ -44,8 +44,7 @@ extension ImageListCell {
     
     func configure(url: URL, date: String, isLiked: Bool) {
         mainImageView.kf.indicatorType = .activity
-        mainImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeHolder")) { [weak self] result in
-        }
+        mainImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeHolder")) 
         dateLabel.text = date
         let likeImage = isLiked ? UIImage(named: "activeFavourite") : UIImage(named: "favourite")
         favouriteButton.setImage(likeImage, for: .normal)
