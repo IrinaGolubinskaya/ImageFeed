@@ -22,4 +22,9 @@ final class OAuth2TokenStorage {
             guard isSuccess else { return }
         }
     }
+    
+    func deleteToken() {
+        token = nil
+        KeychainWrapper.standard.removeObject(forKey: Keys.token.rawValue)
+    }
 }

@@ -22,7 +22,7 @@ final class ProfileService {
         self.profile = profile
     }
     
-    private func makeRequest()-> URLRequest? {
+    private func makeRequest() -> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -41,6 +41,7 @@ final class ProfileService {
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<ProfileResult, Error>) in
             guard let self = self else { return }
+            
             switch result {
             case .success(let profileResult):
                 let profile = Profile(
@@ -55,65 +56,8 @@ final class ProfileService {
                 completion(.failure(error))
             }
         }
+        
         self.task = task
         task.resume()
-    }
-}
-
-struct ProfileResult: Decodable {
-    let username: String
-    let firstName: String?
-    let lastName: String?
-    let bio: String?
-    let profileImage: ProfileImage?
-    
-    private enum CodingKeys: String, CodingKey {
-        case username
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case bio
-        case profileImage = "profile_image"
-    }
-}
-
-struct Links: Decodable {
-    let selfLink: String
-    let html: String
-    let photos: String
-    let likes: String
-    let portfolio: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case selfLink = "self"
-        case html
-        case photos
-        case likes
-        case portfolio
-    }
-}
-
-struct Social: Decodable {
-    let instagramUsername: String
-    let portfolioURL: String
-    let twitterUsername: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case instagramUsername = "instagram_username"
-        case portfolioURL = "portfolio_url"
-        case twitterUsername = "twitter_username"
-    }
-}
-
-struct Badge: Decodable {
-    let title: String
-    let primary: Bool
-    let slug: String
-    let link: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case title
-        case primary
-        case slug
-        case link
     }
 }

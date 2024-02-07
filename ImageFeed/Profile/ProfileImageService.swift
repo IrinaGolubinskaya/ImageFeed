@@ -31,7 +31,7 @@ final class ProfileImageService {
         guard let request = makeRequest(username: username) else { return
             assertionFailure("Не верный запрос")
         }
-                
+        
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
@@ -45,6 +45,7 @@ final class ProfileImageService {
                 completion(.failure(error))
             }
         }
+        
         self.task = task
         task.resume()
     }
@@ -54,19 +55,10 @@ final class ProfileImageService {
         var request = URLRequest(url: url)
         
         request.httpMethod = "GET"
+        
         if let token = authToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         return request
     }
-}
-
-struct UserResult: Codable {
-    let profileImage: ProfileImage?
-}
-
-struct ProfileImage: Codable {
-    let small: String?
-    let medium: String?
-    let large: String?
 }
