@@ -96,7 +96,7 @@ final class ImagesListService {
     }
     
     private func makeLikeRequest(id: String, isLiked: Bool) -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos/\(id)/like") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURL.absoluteString)/photos/\(id)/like") else {
             return nil
         }
         
@@ -111,7 +111,7 @@ final class ImagesListService {
     }
     
     private func makeRequest() -> URLRequest? {
-        let path = "\(Constants.defaultBaseURLString)/photos"
+        let path = "\(Constants.defaultBaseURL.absoluteString)/photos"
         
         guard let lastLoadedPage = self.lastLoadedPage != nil ? self.lastLoadedPage : 1 else {
             return nil

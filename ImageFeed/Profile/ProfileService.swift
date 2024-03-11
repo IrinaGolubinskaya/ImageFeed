@@ -23,7 +23,7 @@ final class ProfileService {
     }
     
     private func makeRequest() -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
+        guard let url = URL(string: "\(Constants.defaultBaseURL.absoluteString)/me") else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
