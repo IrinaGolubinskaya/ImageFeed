@@ -15,12 +15,18 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
+    @IBOutlet private weak var authButton: UIButton!
     
     private let showWebViewSegueIdentifier = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        authButton.accessibilityIdentifier = "Authenticate"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -55,7 +61,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
 }
 
-// MARK: -
+// MARK: - SplashAlertDelegate
 
 extension AuthViewController: SplashAlertDelegate {
     func showErrorAlert(alert: UIAlertController) {

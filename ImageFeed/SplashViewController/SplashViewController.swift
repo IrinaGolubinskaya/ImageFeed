@@ -111,13 +111,15 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
     }
     
-    private func fetchProfile(token:String, completion: @escaping () -> Void) {
+    private func fetchProfile(token: String, completion: @escaping () -> Void) {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(_):
-                guard let userName = self.profileService.profile?.username else { return }
+                guard let userName = self.profileService.profile?.username else {
+                    return
+                }
                 self.profileImageService.fetchProfileImageURL(username: userName) { _ in }
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()

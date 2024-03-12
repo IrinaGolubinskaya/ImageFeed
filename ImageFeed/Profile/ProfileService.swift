@@ -38,6 +38,8 @@ final class ProfileService {
         task?.cancel()
         
         guard let request = makeRequest() else { return }
+        
+        
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<ProfileResult, Error>) in
             guard let self = self else { return }
