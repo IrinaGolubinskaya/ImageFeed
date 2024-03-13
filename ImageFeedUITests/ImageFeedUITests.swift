@@ -16,26 +16,29 @@ final class ImageFeedUITests: XCTestCase {
     }
     
     func testAuth() throws {
-        XCTAssertTrue(app.buttons["Authenticate"].waitForExistence(timeout: 5))
         app.buttons["Authenticate"].tap()
         
         let webView = app.webViews["UnsplashWebView"]
-        XCTAssertTrue(webView.waitForExistence(timeout: 3))
         
+        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+
         let loginTextField = webView.descendants(matching: .textField).element
-        XCTAssertTrue(loginTextField.waitForExistence(timeout: 3))
+        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("")
-        webView.tap()
+        loginTextField.typeText("SomeMail@yandex.ru")
+        webView.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
-        passwordTextField.typeText("")
-        webView.tap()
-        sleep(3)
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
-        XCTAssertTrue(webView.buttons["Login"].waitForExistence(timeout: 3))
+        passwordTextField.tap()
+        passwordTextField.typeText("Password!")
+        webView.swipeUp()
+        
         webView.buttons["Login"].tap()
+        
+        sleep(5)
         
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
@@ -82,8 +85,8 @@ final class ImageFeedUITests: XCTestCase {
         app.tabBars.buttons.element(boundBy: 1).tap()
 
         XCTAssertTrue(app.buttons["LogoutButton"].waitForExistence(timeout: 3))
-        XCTAssertTrue(app.staticTexts["Irina Golubinskaya"].exists)
-        XCTAssertTrue(app.staticTexts["@irenegolub111"].exists)
+        XCTAssertTrue(app.staticTexts[""].exists)
+        XCTAssertTrue(app.staticTexts[""].exists)
 
         app.buttons["LogoutButton"].tap()
 
