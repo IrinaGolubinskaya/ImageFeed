@@ -54,10 +54,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        guard let url = ProfileImageService.shared.avatarURL else {
-            print("аватар нил")
-            return
-        }
+        guard let url = ProfileImageService.shared.avatarURL else { return }
         profileImage.kf.setImage(with: url)
     }
     
@@ -128,6 +125,7 @@ final class ProfileViewController: UIViewController {
     
     private func addLogoutButton() {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.accessibilityIdentifier = "LogoutButton"
         view.addSubview(logoutButton)
         logoutButton.setImage(UIImage(named: "logout"), for: .normal)
         logoutButton.addTarget(nil, action: #selector(showLogoutAlert), for: .touchUpInside)
@@ -142,6 +140,7 @@ final class ProfileViewController: UIViewController {
         let alert = UIAlertController(title: "Пока, пока!",
                                       message: "Уверены что хотите выйти?",
                                       preferredStyle: .alert)
+        alert.view.accessibilityIdentifier = "Alert"
         let closeAlertAction = UIAlertAction(title: "Нет", style: .cancel)
         let logoutAlertAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             self?.tokenStorage.deleteToken()

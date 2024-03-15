@@ -212,6 +212,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LF2-Y2-pOt">
                                 <rect key="frame" x="16" y="680" width="361" height="48"/>
                                 <color key="backgroundColor" name="YP White"/>
+                                <accessibility key="accessibilityConfiguration" hint="Authenticate" identifier="Authenticate" label="Authenticate">
+                                    <bool key="isElement" value="YES"/>
+                                </accessibility>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="TRP-dB-7Iz"/>
                                 </constraints>
@@ -242,6 +245,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="dc0-e8-EJL"/>
+                    <connections>
+                        <outlet property="authButton" destination="LF2-Y2-pOt" id="sB5-de-DK5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xo1-OP-QRO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

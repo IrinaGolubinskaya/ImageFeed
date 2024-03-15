@@ -23,7 +23,7 @@ final class ProfileService {
     }
     
     private func makeRequest() -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else { return nil }
+        guard let url = URL(string: "\(Constants.defaultBaseURL.absoluteString)/me") else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -38,6 +38,8 @@ final class ProfileService {
         task?.cancel()
         
         guard let request = makeRequest() else { return }
+        
+        
         let task = URLSession.shared.objectTask(for: request) { [weak self]
             (result:Result<ProfileResult, Error>) in
             guard let self = self else { return }

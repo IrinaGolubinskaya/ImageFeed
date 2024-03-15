@@ -15,6 +15,7 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
+    @IBOutlet private weak var authButton: UIButton!
     
     private let showWebViewSegueIdentifier = "ShowWebView"
     weak var delegate: AuthViewControllerDelegate?
@@ -23,10 +24,27 @@ final class AuthViewController: UIViewController {
         .lightContent
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        authButton.accessibilityIdentifier = "Authenticate"
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            guard let viewController = segue.destination as? WebViewViewController else { return }
-            viewController.delegate = self
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
+            else {
+                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
+                return
+            }
+            
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
+            webViewViewController.delegate = self
+        } else {
+            super.prepare(for: segue, sender: sender)
         }
     }
 }
@@ -43,7 +61,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
 }
 
-// MARK: -
+// MARK: - SplashAlertDelegate
 
 extension AuthViewController: SplashAlertDelegate {
     func showErrorAlert(alert: UIAlertController) {
